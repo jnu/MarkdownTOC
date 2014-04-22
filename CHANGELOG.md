@@ -4,6 +4,7 @@ Changes in MarkdownTOC
 ## 1.2.1
 
 - Bug fixes
+- Auto-link GitHub ToC
 
 ## 1.2.0
 

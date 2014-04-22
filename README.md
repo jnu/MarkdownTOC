@@ -1,6 +1,6 @@
 # MarkdownTOC Plugin for Sublime Text
 
-This plugin search headings in document and insert TOC(Table Of Contents) to it.
+Fork of [the original project](https://github.com/naokazuterada/MarkdownTOC/) that auto-links the ToC to make them work more awesomely on GitHub.
 
 ![](./demo.gif)
 
@@ -60,11 +60,6 @@ You can control TOC depth in its comment tags.
 
 ```
 <!-- MarkdownTOC depth=2 -->
-
-- foo
-  - bar
-  - buz
-- qux
 
 <!-- /MarkdownTOC -->
 ```
