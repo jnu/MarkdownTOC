@@ -35,7 +35,7 @@ class MarkdowntocInsert(sublime_plugin.TextCommand):
 
     # Search MarkdownTOC comments in document
     def find_tag_and_insert(self, edit):
-        sublime.status_message('fint TOC tags and refresh its content')
+        sublime.status_message('find TOC tags and refresh its content')
 
         extractions = []
         toc_starts = self.view.find_all(
@@ -91,7 +91,7 @@ class MarkdowntocInsert(sublime_plugin.TextCommand):
 
         # -----------------------------------
         # Ignore comments inside code blocks
-        
+
         codeblocks = self.view.find_all("^`{3,}[^`]*$")
         codeblockAreas = [] # [[area_begin, area_end], ..]
         i = 0
@@ -127,7 +127,7 @@ class MarkdowntocInsert(sublime_plugin.TextCommand):
                         heading_num = 1 if (
                             self.view.substr(lines[1])[0] == '=') else 2
                         items.append([heading_num, heading_text])
-        
+
         if len(items) < 1:
             return
         # Shape TOC  ------------------
@@ -143,15 +143,7 @@ class MarkdowntocInsert(sublime_plugin.TextCommand):
             for i in range(heading_num):
                 toc += '\t'
 
-            # Handling anchors ("Reference-style links")
-            matchObj = pattern_anchor.search(heading_text)
-            if matchObj:
-                only_text = heading_text[0:matchObj.start()]
-                only_text = only_text.rstrip()
-                id_text = matchObj.group().replace('[','').replace(']','')
-                toc += '- [' + only_text + '](#' + id_text + ')\n'
-            else:
-                toc += '- ' + heading_text + '\n'
+            toc += '- %s\n' % make_local_link(heading_text)
 
         return toc
 
@@ -172,6 +164,13 @@ def isOutOfAreas(num, areas):
         if area[0] < num and num < area[1]:
             return False
     return True
+
+def _clean_anchor(text):
+    return re.sub(r'[^\w\d\-]', '', re.sub(r'\s+', '-', text.lower()))
+
+def make_local_link(text):
+    anchor = _clean_anchor(text)
+    return "[%s](#%s)" % (text, anchor)
 
 def format(items):
     headings = []
